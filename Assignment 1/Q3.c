@@ -95,7 +95,7 @@ char toLowerCase(char ch){
 int stringLength(char s[]) {
    /*Return the length of the string*/
    int strLen = 0;
-   for (char * curCh = s; (* curCh) != NULL; curCh++) {
+   for (char * curCh = s; (* curCh) != '\0'; curCh++) {
       strLen++;
    }
    return strLen;
@@ -108,7 +108,7 @@ int stringLength(char s[]) {
 ** Pre-Conditions: None
 ** Post-Conditions: Returns bool if acceptable or not
 *********************************************************************/ 
-int camelValid(char* word{
+int camelValid(char* word) {
     int letterCount = 0;                      // Count # of letters
     int nonLetterCount = 0;                   // Count of non letters
     int wordLength = stringLength(word);      // Length of input word
