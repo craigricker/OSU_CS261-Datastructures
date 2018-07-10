@@ -68,6 +68,10 @@ int main(){
     
     /*Print the value of x*/
     printf("%d\n", x);
+    /* Is the value of x different than the value that was printed at first? Why or why not?
+    ** Yes, because x was passed by reference, and in fooA the pointer was dereferenced 
+    ** and increased by 5
+    */
     
     /*Call fooB() with the address of x*/
     fooB(&x);
