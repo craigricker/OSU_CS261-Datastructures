@@ -1,7 +1,11 @@
 /* CS261- Assignment 1 - Q.2*/
-/* Name:
- * Date:
+/* Name:    Craig Ricker
+ * Date:    July 10, 2018
  * Solution description:
+ * In this assignment, we explore pointers more in depth.
+ * Three values are created in RANDOM_RANGE, two are passed by reference
+ * and within function these pointers are swapped. One is passed by value
+ * and decremented - this is a local change to the function.
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,9 +13,21 @@
 
 #define RANDOM_RANGE 11
 
+
+/*********************************************************************
+** Function:        foo
+** Description:     Swaps what a and b point to,
+**                  decrements c
+** Parameters:      int * a: value to be swapped
+**                  int * b: second value to be swapped
+**                  int c:   value to be decremented locally
+** Pre-Conditions:  None
+** Post-Conditions: Pointers of a and b are swapped withins cope of
+**                  calling function.
+*********************************************************************/ 
 int foo(int* a, int* b, int c){
     /*Swap the addresses stored in the pointer variables a and b*/
-    int * temp = a;
+    int * temp = a;         // Container to preserve a
     a = b;
     b = temp;
     

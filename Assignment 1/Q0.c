@@ -1,7 +1,9 @@
 /* CS261- Assignment 1 - Q. 0*/
-/* Name: Craig Ricker
- * Date:
- * Solution description:
+/* Name:    Craig Ricker
+ * Date:    July 10, 2018
+ * Solution description: This file is an exploration on how to deference 
+ * pointers, and how altering a pointer and altering what it points to
+ * are very distinct things.
  */
  
 #include <stdio.h>
@@ -10,6 +12,14 @@
 
 #define RANDOM_RANGE 11;        /* Acceptable high end of range */
 
+
+/*********************************************************************
+** Function:        fooA
+** Description:     Prints input value, and increments by 5
+** Parameters:      iptr, pointer to an int
+** Pre-Conditions:  None
+** Post-Conditions: (ipytr) is increased by 5
+*********************************************************************/ 
 void fooA(int* iptr){
   
      /*Print the value and address of the integer pointed to by iptr*/
@@ -21,7 +31,13 @@ void fooA(int* iptr){
      
 }
 
-
+/*********************************************************************
+** Function:        fooB
+** Description:     Prints pointer address, and decrements pointer
+** Parameters:      jptr, pointer to an int
+** Pre-Conditions:  None
+** Post-Conditions: None
+*********************************************************************/ 
 void fooB(int* jptr){
   
      /*Print the value and address of the integer pointed to by jptr*/
