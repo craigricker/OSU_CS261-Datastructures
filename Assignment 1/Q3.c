@@ -76,47 +76,47 @@ void camelCase(char* word){
    
    // Replace all non letter strings with _ as explained in assignment
    // ""_random_ _word" should be changed to "random_word" first."
+   int bufferDigit = 0;
    for (digit = 0; digit < wordLength; digit++) {
       if (isLetter((word[digit]))) {
-         word[digit] = toLowerCase((word[digit]));
+         if (prevLetter)
+            buffer[bufferDigit] = toLowerCase((word[digit]));
+         else
+            buffer[bufferDigit] = toUpperCase((word[digit]));
          prevLetter = 1;
       }
       else {
-         word[digit] = REPLACE_CHAR;
-         int offset = 1;
-         while (!isLetter(word[digit+offset])) {
+         if (digit == 0)
+            continue;
+         buffer[bufferDigit] = REPLACE_CHAR;
+         while (!isLetter(word[digit+1])) {
             digit++;
-            offset++;
-            wordLength--;
          }
-
+         prevLetter = 0;
       }
+      bufferDigit++;
    }
    
-   for (digit = 0; digit < wordLength; digit ++) {
-      
+   for (int digitN = 0; digitN < BUFFER_SIZE; digitN++) {
+      word[digitN] = buffer[digitN];
    }
-   
-   
-   
-   
-
-	
 }
 
 int main(){
+   while (1) {
+      /*Read the string from the keyboard*/
+      char input[BUFFER_SIZE];   // Container for user input
+      printf("Please enter a value to be converted:");
+      scanf("%s", input);
+      /*Call camelCase*/
+      camelCase(input);
 
-	/*Read the string from the keyboard*/
-   char input[BUFFER_SIZE];   // Container for user input
-   printf("Please enter a value to be converted:");
-   scanf("%s", input);
-	/*Call camelCase*/
-   camelCase(input);
-   printf("%s\n", input);
-	
-	/*Print the new string*/
-	
-	
-	return 0;
+      
+      /*Print the new string*/
+      printf("%s\n", input);
+      
+      
+      return 0;
+   }
 }
 
