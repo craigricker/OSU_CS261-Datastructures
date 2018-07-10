@@ -69,7 +69,7 @@ void camelCase(char* word){
    }
       // Decrement digit to see if it is a letter
    digit--;
-   if (!nonLetterCount ||!letterCount || !isLetter((word[digit]))) {
+   if (!nonLetterCount ||!letterCount || (word[digit] == '_')) {
       printf("invalid input string\n");
       return;
    }
@@ -79,22 +79,18 @@ void camelCase(char* word){
    int bufferDigit = 0;
    for (digit = 0; digit < wordLength; digit++) {
       if (isLetter((word[digit]))) {
-         if (prevLetter)
+         if (prevLetter || (bufferDigit == 0))
             buffer[bufferDigit] = toLowerCase((word[digit]));
          else
             buffer[bufferDigit] = toUpperCase((word[digit]));
          prevLetter = 1;
+         bufferDigit++;
       }
       else {
          if (digit == 0)
             continue;
-         buffer[bufferDigit] = REPLACE_CHAR;
-         while (!isLetter(word[digit+1])) {
-            digit++;
-         }
          prevLetter = 0;
       }
-      bufferDigit++;
    }
    
    for (int digitN = 0; digitN < BUFFER_SIZE; digitN++) {
@@ -103,11 +99,12 @@ void camelCase(char* word){
 }
 
 int main(){
-   while (1) {
+   int x = 0;
+   while (x==0) {
       /*Read the string from the keyboard*/
       char input[BUFFER_SIZE];   // Container for user input
       printf("Please enter a value to be converted:");
-      scanf("%s", input);
+      scanf ("%[^\n]%*c", input);
       /*Call camelCase*/
       camelCase(input);
 
@@ -115,8 +112,8 @@ int main(){
       /*Print the new string*/
       printf("%s\n", input);
       
-      
-      return 0;
    }
+      return 0;
+   
 }
 
