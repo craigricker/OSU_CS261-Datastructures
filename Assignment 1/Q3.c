@@ -101,27 +101,17 @@ int stringLength(char s[]) {
    return strLen;
 }
 
-
-
 /*********************************************************************
-** Function: camelCase
-** Description: Converts input to camelCase if acceptable input, 
-**              if not, prints error and returns early without
-**              converting.
-** Parameters: char * word: word to be converted
+** Function: camelValid
+** Description: Checks if input is acceptable for camelCase
+** Parameters: char * word: string to check
 ** Pre-Conditions: None
-** Post-Conditions: word is converted to camelCase if input was
-**                  acceptable.
+** Post-Conditions: Returns bool if acceptable or not
 *********************************************************************/ 
-void camelCase(char* word){
-	/*Convert to camelCase*/
-   int letterCount = 0;                      // Count # of letters
-   int nonLetterCount = 0;                   // Count of non letters
-   int wordLength = stringLength(word);      // Length of input word
-   int digit;                                // Track current digit
-   int prevLetter  = 0;                      // Check if previous was letter
-   char buffer[BUFFER_SIZE];                  // To store created output
-   
+int camelValid(char* word{
+    int letterCount = 0;                      // Count # of letters
+    int nonLetterCount = 0;                   // Count of non letters
+    int wordLength = stringLength(word);      // Length of input word
    /* Loop through string, count # of letter digits,
    ** and non letter digits
    */
@@ -138,8 +128,26 @@ void camelCase(char* word){
    digit--;
    if (!nonLetterCount ||!letterCount || (word[digit] == '_')) {
       printf("invalid input string\n");
-      return;
+      return 0;
    }
+  return 1;         // Valid
+}
+
+/*********************************************************************
+** Function: camelCase
+** Description: Converts input to camelCase 
+** Parameters: char * word: word to be converted
+** Pre-Conditions: None
+** Post-Conditions: word is converted to camelCase 
+*********************************************************************/ 
+void camelCase(char* word){
+	/*Convert to camelCase*/
+   int wordLength = stringLength(word);      // Length of input word
+   int digit;                                // Track current digit
+   int prevLetter  = 0;                      // Check if previous was letter
+   char buffer[BUFFER_SIZE];                  // To store created output
+   
+
    
     /* Loop through input, and convert to camelCase as explained
     ** in assignment pdf.
@@ -178,17 +186,22 @@ void camelCase(char* word){
 }
 
 int main(){
-
-    /*Read the string from the keyboard*/
     char input[BUFFER_SIZE];   // Container for user input
+    
+    
+    /*Read the string from the keyboard*/
     printf("Please enter a value to be converted:");
     scanf ("%[^\n]%*c", input);
-    /*Call camelCase*/
-    camelCase(input);
+    
+    /* If valid, convert and print */
+    if (camelValid(input)){
+        /*Call camelCase*/
+        camelCase(input);
 
 
-    /*Print the new string*/
-    printf("%s\n", input);
+        /*Print the new string*/
+        printf("%s\n", input);
+    }
 
 
     return 0;
