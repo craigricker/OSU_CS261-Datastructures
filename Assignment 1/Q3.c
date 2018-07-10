@@ -112,6 +112,7 @@ int camelValid(char* word) {
     int letterCount = 0;                      // Count # of letters
     int nonLetterCount = 0;                   // Count of non letters
     int wordLength = stringLength(word);      // Length of input word
+    int digit;                                // Location in word
    /* Loop through string, count # of letter digits,
    ** and non letter digits
    */
