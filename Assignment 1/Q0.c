@@ -1,5 +1,5 @@
 /* CS261- Assignment 1 - Q. 0*/
-/* Name:
+/* Name: Craig Ricker
  * Date:
  * Solution description:
  */
@@ -13,11 +13,11 @@
 void fooA(int* iptr){
   
      /*Print the value and address of the integer pointed to by iptr*/
-     printf("%d", (* iptr));
+     printf("%d\n", (* iptr));
      /*Increment the value of the integer pointed to by iptr by 5*/
      (* iptr) += 5;
      /*Print the address of iptr itself*/
-     printf("%d", iptr);
+     printf("%p\n", iptr);
      
 }
 
@@ -25,17 +25,17 @@ void fooA(int* iptr){
 void fooB(int* jptr){
   
      /*Print the value and address of the integer pointed to by jptr*/
-     printf("Value: %d, address: %d", (*jptr), jptr);
+     printf("Value: %d, address: %p\n", (*jptr), jptr);
      /*Decrement jptr by 1*/
      jptr--;
      /*Print the address of jptr itself*/
-     printf("Address: %d", jptr);
+     printf("Address: %p\n", jptr);
 }
 
 
 int main(){
     /* Seed srand using time */
-    srand(time(NULL));
+    srand((unsigned int) time(NULL));
     
     /*Declare an integer x and initialize it randomly to a value in [0,10] 
 */
@@ -43,7 +43,7 @@ int main(){
 
     
     /*Print the value and address of x*/
-    printf("X is : %d, with an address of %d", x, &x);
+    printf("X is : %d, with an address of %p\n", x, &x);
 
         
     
@@ -51,7 +51,7 @@ int main(){
     fooA(&x);
     
     /*Print the value of x*/
-    printf("%d", x);
+    printf("%d\n", x);
     
     /*Call fooB() with the address of x*/
     fooB(&x);
