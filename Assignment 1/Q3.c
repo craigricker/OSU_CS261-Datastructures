@@ -109,30 +109,32 @@ int stringLength(char s[]) {
 ** Post-Conditions: Returns bool if acceptable or not
 *********************************************************************/ 
 int camelValid(char* word) {
-    int letterCount = 0;                      // Count # of letters
-    int nonLetterCount = 0;                   // Count of non letters
+    int inWord = 0;                           // Currently in a word?
+    int wordCount = 0;                        // How many words?
     int wordLength = stringLength(word);      // Length of input word
-    int digit;                                // Location in word
-   /* Loop through string, count # of letter digits,
-   ** and non letter digits
+   /* Loop through string, count # of words
    */
-   for (digit = 0; digit < wordLength; digit++) {
-      if (isLetter((word[digit])))
-         letterCount++;
-      else
-         nonLetterCount++;
+   for (int digit = 0; digit < wordLength; digit++) {
+      if (isLetter((word[digit]))){
+         if (inWord)
+            continue;
+         wordCount++;
+         inWord = 1;
+      }
+      else {
+         inWord = 0;
+      }
    }
    
-   /* Input is considered INVALID if it has no nonLetters,
-   ** if it has no letters, or if it ends on a nonletter
-   */
-   digit--;
-   if (!nonLetterCount ||!letterCount || (word[digit] == '_')) {
+   /* if only one word, invalid */
+   if (wordCount <= 1) {
       printf("invalid input string\n");
       return 0;
    }
   return 1;         // Valid
 }
+
+
 
 /*********************************************************************
 ** Function: camelCase
@@ -144,29 +146,20 @@ int camelValid(char* word) {
 void camelCase(char* word){
 	/*Convert to camelCase*/
    int wordLength = stringLength(word);      // Length of input word
-   int digit;                                // Track current digit
    int prevLetter  = 0;                      // Check if previous was letter
-   char buffer[BUFFER_SIZE];                  // To store created output
-   
+   char buffer[BUFFER_SIZE] = "";                  // To store created output
+   int bufferDigit = 0;                 // Location in output word
 
    
     /* Loop through input, and convert to camelCase as explained
     ** in assignment pdf.
-    ** Removes all non letters characters, and capitalizes 
-    ** the beginning of following words
-    ** If a letter is found, if it is the first character in the word
-    ** and not the first letter of the first word, it is capitalized.
-    ** Otherwise, it is printed out as lowercase
-    ** Non letter characters are ignored, this is accomplished by
-    ** keeping track of the location of input word, and buffer word
+    ** In this first loop, replace all non letters with _
+    ** Remove leading/trailing, and reduce repeats
+    ** If repeat is found, just continue without copying
     */
-   int bufferDigit = 0;                 // Location in output word
-   for (digit = 0; digit < wordLength; digit++) {
+   for (int digit = 0; digit < wordLength; digit++) {
       if (isLetter((word[digit]))) {            // Letter found
-         if (prevLetter || (bufferDigit == 0))  // Lower case
-            buffer[bufferDigit] = toLowerCase((word[digit]));
-         else                                   // Upper case
-            buffer[bufferDigit] = toUpperCase((word[digit]));
+         buffer[bufferDigit] = toLowerCase((word[digit]));
          /* You are now "in" a word, and successfully added
          ** character to buffer
          */
@@ -174,16 +167,37 @@ void camelCase(char* word){
          bufferDigit++;
       } 
       else {                                    // Non letter found
-         if (digit == 0)
-            continue;
+         if (prevLetter){
+            buffer[bufferDigit] = '_';
+            bufferDigit++;
+         }
          prevLetter = 0;
       }
    }
    
-   /* Loop through buffer and input, copying buffer into input */
-   for (int digitN = 0; digitN < BUFFER_SIZE; digitN++) {
-      word[digitN] = buffer[digitN];
+   /* Similar logic to above
+   ** Loop through, finding actual digits and print them out
+    * if you encounter _ ignore it, and capitalize the next letter
+   */
+   wordLength = stringLength(buffer);
+   prevLetter = 1;
+   bufferDigit = 0;                 // Letter in output
+   for (int digitN = 0; digitN < wordLength; digitN++) {
+      if (isLetter(buffer[digitN])) {     // Digit is letter
+         if (prevLetter) {                // Middle of word
+            word[bufferDigit] = buffer[digitN];
+         }
+         else {                           // Begin of word
+            word[bufferDigit] = toUpperCase(buffer[digitN]);
+         }
+         bufferDigit++;
+         prevLetter = 1;                  // Now in middle of word
+      }
+      else
+         prevLetter = 0;
+
    }
+   word[bufferDigit] = '\0';              // Add terminating character
 }
 
 int main(){
