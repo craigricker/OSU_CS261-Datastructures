@@ -32,8 +32,37 @@ char nextChar(char* s)
 */
 int isBalanced(char* s)
 {
-	/* FIXME: You will write this function */		
-	return 0;
+   struct DynArr * stack = newDynArr(20);
+   char currChar;
+   while ((currChar = nextChar(s)) != '0') {
+      switch (currChar) {
+         case '{':
+         case '[':
+         case '(':
+            pushDynArr(stack, currChar);
+            break;
+         case '}':
+            if (topDynArr(stack) == '{') {
+               popDynArr(stack);
+               break;
+            }
+         case ']':
+            if (topDynArr(stack) == '[') {
+               popDynArr(stack);
+               break;
+            }
+         case ')':
+            if (topDynArr(stack) == '(') {
+               popDynArr(stack);
+               break;
+            }
+      
+      }
+   }
+   if (isEmptyDynArr(stack))
+      return 1;
+   else
+      return 0;
 }
 
 int main(int argc, char* argv[]){
