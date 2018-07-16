@@ -1,8 +1,17 @@
+/* CS261- Assignment 2
+ * Name:    Craig Ricker
+ * Date:    July 16, 2018
+ * Solution description: Uses stack implemented by myself
+ * in order to check if command line argument math function
+ * has its paranthesis properly balanced
+ */
 /*	stack.c: Stack application. */
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "dynArray.h"
+
+#define BUFFER_SIZE 20
 
 
 /* ***************************************************************
@@ -32,36 +41,40 @@ char nextChar(char* s)
 */
 int isBalanced(char* s)
 {
-   struct DynArr * stack = newDynArr(20);
+   struct DynArr * stack = newDynArr(BUFFER_SIZE);
    char currChar;
+   
+   // Loop through entire input, pushing left hand parenth
+   // if you encounter right hand partenth, if the
+   // corresponding is on stack, pop it off and remove
    while ((currChar = nextChar(s)) != '0') {
       switch (currChar) {
          case '{':
          case '[':
-         case '(':
+         case '(':                           // Left hand
             pushDynArr(stack, currChar);
             break;
-         case '}':
-            if (topDynArr(stack) == '{') {
+         case '}':                           // Right hand
+            if (topDynArr(stack) == '{') {   // { match }
                popDynArr(stack);
                break;
             }
-         case ']':
-            if (topDynArr(stack) == '[') {
+         case ']':                           // Right hand
+            if (topDynArr(stack) == '[') {   // [ match ]
                popDynArr(stack);
                break;
             }
-         case ')':
-            if (topDynArr(stack) == '(') {
+         case ')':                           // Right hand
+            if (topDynArr(stack) == '(') {   // ( match )
                popDynArr(stack);
                break;
             }
       
       }
    }
-   if (isEmptyDynArr(stack))
+   if (isEmptyDynArr(stack))        // If empty, balanced
       return 1;
-   else
+   else                             // If not, unbalanced
       return 0;
 }
 
