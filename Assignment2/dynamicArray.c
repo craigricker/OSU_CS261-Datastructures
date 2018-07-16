@@ -26,7 +26,7 @@ struct DynArr
 void initDynArr(DynArr *v, int capacity)
 {
 	assert(capacity > 0);
-	assert(v!= 0);
+	//assert(v!= 0);
 	v->data = (TYPE *) malloc(sizeof(TYPE) * capacity);
 	assert(v->data != 0);
 	v->size = 0;
@@ -91,7 +91,26 @@ void deleteDynArr(DynArr *v)
 */
 void _dynArrSetCapacity(DynArr *v, int newCap)
 {	
-	/* FIXME: You will write this function */
+   // Create new array with size newCap
+   TYPE * data = (TYPE*)malloc(sizeof(TYPE)*newCap);
+   int index = v->size;        // Size of array
+
+
+   
+   // Copy over all elements
+   for(index = 0; index < v->size;  index++)
+   {
+      data[index] = v->data[index];
+      
+   }
+   // Free array using function call
+   freeDynArr(v);
+   // Update v to point to same thing as temp
+   v->data = data;
+   v->capacity = newCap;
+   v->size = index;
+   
+
 	
 }
 
@@ -118,7 +137,12 @@ int sizeDynArr(DynArr *v)
 */
 void addDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
+   /* Check to see if a resize is necessary */
+   if(v->size >= v->capacity)
+      _dynArrSetCapacity(v, 2 * v->capacity);
+   
+   v->data[v->size] = val;
+   v->size++;
 
 }
 
@@ -136,9 +160,9 @@ void addDynArr(DynArr *v, TYPE val)
 TYPE getDynArr(DynArr *v, int pos)
 {
 	/* FIXME: You will write this function */
+   assert(pos < v->size);
+   return v->data[pos];
 
-	/* FIXME: you must change this return value */
-	return 1; 
 }
 
 /*	Put an item into the dynamic array at the specified location,
@@ -154,7 +178,11 @@ TYPE getDynArr(DynArr *v, int pos)
 */
 void putDynArr(DynArr *v, int pos, TYPE val)
 {
-	/* FIXME: You will write this function */
+   // Assert it is within accetable bounds
+   assert(pos <= v->size);
+   assert(pos >= 0);
+   // Store value
+   v->data[pos] = val;
 }
 
 /*	Swap two specified elements in the dynamic array
@@ -168,7 +196,16 @@ void putDynArr(DynArr *v, int pos, TYPE val)
 */
 void swapDynArr(DynArr *v, int i, int  j)
 {
-	/* FIXME: You will write this function */
+   TYPE temp;      // To store value during swap
+   // Check if legal access
+   //assert(( i < v->size) && (j < v->size));
+   //assert(( i < 0) && (j < 0));
+   
+   // Perform swap
+   temp = v->data[i];
+   v->data[i] = v->data[j];
+   v->data[j] = temp;
+
 }
 
 /*	Remove the element at the specified location from the array,
@@ -184,7 +221,18 @@ void swapDynArr(DynArr *v, int i, int  j)
 */
 void removeAtDynArr(DynArr *v, int idx)
 {
-	/* FIXME: You will write this function */
+   // Assert it is within accetable bounds
+   assert(idx <= v->size);
+   assert(idx >= 0);
+   
+   for(int i= idx;i < (v->size - 1); i++)
+   {
+      v->data[i] = v->data[i+1];
+      
+   }
+   
+   v->size--;
+
 }
 
 
@@ -203,10 +251,8 @@ void removeAtDynArr(DynArr *v, int idx)
 */
 int isEmptyDynArr(DynArr *v)
 {
-	/* FIXME: You will write this function */
-	
-	/* FIXME:  You will change this return value*/
-	return 1;
+   // If array is empty, size is 0
+	return (v->size == 0);
 }
 
 /* 	Push an element onto the top of the stack
@@ -220,7 +266,8 @@ int isEmptyDynArr(DynArr *v)
 */
 void pushDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
+   // Use already created function
+   addDynArr(v, val);
 }
 
 /*	Returns the element at the top of the stack 
@@ -232,10 +279,9 @@ void pushDynArr(DynArr *v, TYPE val)
 */
 TYPE topDynArr(DynArr *v)
 {
-	/* FIXME: You will write this function */
-	
-	/* FIXME: You will change this return value*/
-	return 1;
+   int retIndex = (v->size);
+   retIndex--;
+   return v->data[retIndex];
 }
 
 /* Removes the element on top of the stack 
@@ -248,7 +294,10 @@ TYPE topDynArr(DynArr *v)
 */
 void popDynArr(DynArr *v)
 {
-	/* FIXME: You will write this function */
+
+   int retIndex = (v->size);
+   retIndex--;
+   removeAtDynArr(v, retIndex);
 }
 
 /* ************************************************************************
@@ -268,10 +317,12 @@ void popDynArr(DynArr *v)
 */
 int containsDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
-	
-	/* FIXME:  You will change this return value */
-	return 1;
+   // Loop through the entire array, seeing if it is present or not
+   for (int index = 0; index < (v->size); index++) {
+      if (EQ(v->data[index], val))
+         return 1;               // Item is found
+   }
+	return 0;                     // Item not present
 
 }
 
@@ -287,5 +338,11 @@ int containsDynArr(DynArr *v, TYPE val)
 */
 void removeDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
+   for (int i = 0; i < v->size; i++) {
+      if (EQ(val, v->data[i])) { /* found it */
+         removeAtDynArr(v, i);
+         return;
+      }
+   }
+
 }
