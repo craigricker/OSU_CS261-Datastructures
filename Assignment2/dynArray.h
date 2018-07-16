@@ -4,8 +4,8 @@
 
 #ifndef __TYPE
 #define __TYPE
-# define TYPE      int
-# define TYPE_SIZE sizeof(int)
+# define TYPE      char
+# define TYPE_SIZE sizeof(char)
 # endif
 
 # ifndef LT
