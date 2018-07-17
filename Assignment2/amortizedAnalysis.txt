@@ -1,0 +1,10 @@
+1. The entire process to push 40 items with a starting array of 8 will cost a total of 96 units: if all were O(1) it would cost 40. However, at three points you have to resize: 8, 16 and 32. 37 + 9 + 17 + 33 = 96. For this situation, the average cost per push is 96/40 = 2.4. In this particular case, it was O(2.4N). However, as explained here: https://en.wikipedia.org/wiki/Amortized_analysis#Dynamic_Array, the average time is O(1) regardless of the dataset size.
+
+2. For capacity of 8, and adding 40 items with these stipulations it takes 408 units of "cost", average of 10.2 Below is pseudo code of how to calculate the cost based on N = number of items added, and capacity = 8. However, I am honestly not sure how to directly translate this to O(n) notation. Approximating it, it is worse than log10(N).
+total_cost = capacity
+for x in range (capactiy, N):
+    if x is odd:
+        total_cost += x
+    else:
+        total_cost += 1
+ 
