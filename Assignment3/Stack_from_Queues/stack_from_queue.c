@@ -192,23 +192,13 @@ The
  * function then also increases the size of the stack by 1. 
  */
 void linkedListStackPush(struct linkedListStack *s, TYPE d) {
-    struct listQueue * swapper = s->Q1;          // To swap Q1 and Q2
+	assert(s);
     
     // Increase size, because of push
     s->structSize++;
     
     // Push to empty Q2
-    listQueueAddBack(s->Q2, d);
-    
-    // Move all elements from Q1 to Q2;
-    while (!listQueueIsEmpty(s->Q1)) {
-        listQueueAddBack(s->Q2, listQueueFront(s->Q1));
-        listQueueRemoveFront(s->Q1);
-    }
-    
-    // Swap the two queues
-    s->Q1 = s->Q2;
-    s->Q2 = swapper;
+    listQueueAddBack(s->Q1, d);
 
 
 }
@@ -223,9 +213,17 @@ void linkedListStackPop(struct linkedListStack *s) {
 	// Check to make sure not empty
     assert(!listQueueIsEmpty(s->Q1));
     
-    // Pop off from Q1 & decrease size
-    listQueueRemoveFront(s->Q1);
-    s->structSize--;
+	while (s->Q1->size != 1) {
+		listQueueAddBack(s->Q2, listQueueFront(s->Q1));
+		listQueueRemoveFront(s->Q1);
+	}
+
+	listQueueRemoveFront(s->Q1);
+	s->structSize--;
+
+	struct listQueue * swapper = s->Q1;
+	s->Q1 = s->Q2;
+	s->Q2 = swapper;
 
 }
 /*
@@ -235,7 +233,8 @@ is
  */
 TYPE linkedListStackTop(struct linkedListStack *s) {
     // Assert not empty and return front value
-    assert(!listQueueIsEmpty(s->Q1));
+    assert(!linkedListStackIsEmpty(s));
+
     return listQueueFront(s->Q1);
 
 }
@@ -327,7 +326,7 @@ int main(int argc, char* argv[])
 	printf("One more pop:\n");
 	linkedListStackPop(stack);
 	printf("Value at the top of stack: %d\n", 
-linkedListStackTop(stack));
+	linkedListStackTop(stack));
 
 	linkedListStackFree(stack);
 
@@ -348,9 +347,7 @@ linkedListStackTop(stack));
 	//printf("Front value is: %d\n", listQueueFront(listMe));
 	//listQueueRemoveFront(listMe);
 	//printList(listMe);
-	//printf("Front value is: %d\n", listQueueFront(listMe));
-	//listQueueRemoveFront(listMe);
-	//printList(listMe);
+
 	return 0;
 
 }
