@@ -40,7 +40,7 @@ struct listQueue {
 void listQueueInit(struct listQueue *q) {
    struct link *lnk = (struct link *) malloc(sizeof(struct link));
    assert(lnk != 0); /* lnk is the sentinel */
-   lnk->next = 0;
+   lnk->next = NULL;
    q->firstLink = q->lastLink = lnk;
    q->size = 0;
 }
@@ -56,7 +56,7 @@ struct listQueue * listQueueCreate()
 {
      struct listQueue * newQueue = (struct listQueue *) \
         malloc(sizeof(struct listQueue));
-    init(newQueue);
+    listQueueInit(newQueue);
     return newQueue;
 	
 }
@@ -83,8 +83,10 @@ void listQueueAddBack(struct listQueue *q, TYPE e) {
 	
     struct link* newLink=(struct link*)malloc(sizeof(struct link));
     q->lastLink->next = newLink;
+	newLink->value = e;
+	newLink->next = NULL;
     q->lastLink = newLink;
-    newLink->value = e;
+	q->size++;
 }
 
 /*
@@ -92,11 +94,12 @@ void listQueueAddBack(struct listQueue *q, TYPE e) {
  */
 void listQueueRemoveFront(struct listQueue *q) {
 
-    assert(!listQueueIsEmpty);              // Ensure links present
-    struct link * toFree = q->firstLink;    // Store pointer to free
-    q->firstLink = toFree->next;            // Set firstlink to prev 2nd
+    assert(!listQueueIsEmpty(q));            // Ensure links present
+    struct link * toFree = q->firstLink->next;// Store pointer to free
+    q->firstLink->next = toFree->next;            // Set firstlink to prev 2nd
     free(toFree);                           // Free to remove authority
     toFree = NULL;                          // Set NULL to remove access
+	q->size--;								// Reduce size
 
 
 
@@ -107,8 +110,8 @@ void listQueueRemoveFront(struct listQueue *q) {
  * Function returns the value at the front of the list.
  */
 TYPE listQueueFront(struct listQueue *q) {
-    assert(!listQueueIsEmpty); 
-    return q->firstLink->value;
+    assert(!listQueueIsEmpty(q));            // Ensure links present
+    return q->firstLink->next->value;
 
 }
 
@@ -161,7 +164,7 @@ the stack.
 */
 struct linkedListStack * linkedListStackCreate(){
     // Allocate space for
-    struct linkedListStack * newStack = (struct listQueue *) \
+    struct linkedListStack * newStack = (struct linkedListStack *) \
         malloc(sizeof(struct linkedListStack));
     // Initialize
     linkedListStackInit(newStack);
@@ -189,22 +192,22 @@ The
  * function then also increases the size of the stack by 1. 
  */
 void linkedListStackPush(struct linkedListStack *s, TYPE d) {
-    struct link * swapper = s->Q1;          // To swap Q1 and Q2
+    struct listQueue * swapper = s->Q1;          // To swap Q1 and Q2
     
     // Increase size, because of push
     s->structSize++;
     
     // Push to empty Q2
-    listQueueAddBack(s->Q2);
+    listQueueAddBack(s->Q2, d);
     
     // Move all elements from Q1 to Q2;
-    while (listQueueIsEmpty(s->Q1) {
+    while (!listQueueIsEmpty(s->Q1)) {
         listQueueAddBack(s->Q2, listQueueFront(s->Q1));
         listQueueRemoveFront(s->Q1);
     }
     
     // Swap the two queues
-    s->Q1 = s->q2;
+    s->Q1 = s->Q2;
     s->Q2 = swapper;
 
 
@@ -218,7 +221,7 @@ maintained
  */
 void linkedListStackPop(struct linkedListStack *s) {
 	// Check to make sure not empty
-    assert(!listQueueIsEmpty(s->Q1);
+    assert(!listQueueIsEmpty(s->Q1));
     
     // Pop off from Q1 & decrease size
     listQueueRemoveFront(s->Q1);
@@ -232,7 +235,7 @@ is
  */
 TYPE linkedListStackTop(struct linkedListStack *s) {
     // Assert not empty and return front value
-    assert(!listQueueIsEmpty(s->Q1);
+    assert(!listQueueIsEmpty(s->Q1));
     return listQueueFront(s->Q1);
 
 }
@@ -328,6 +331,26 @@ linkedListStackTop(stack));
 
 	linkedListStackFree(stack);
 
+	//struct listQueue * listMe = listQueueCreate();
+	//listQueueAddBack(listMe, 1);
+	//listQueueAddBack(listMe, 2);
+	//listQueueAddBack(listMe, 3);
+	//printList(listMe);
+
+	//printf("Front value is: %d\n", listQueueFront(listMe));
+	//listQueueRemoveFront(listMe);
+	//printList(listMe);
+
+
+	//printf("Front value is: %d\n", listQueueFront(listMe));
+	//listQueueRemoveFront(listMe);
+	//printList(listMe);
+	//printf("Front value is: %d\n", listQueueFront(listMe));
+	//listQueueRemoveFront(listMe);
+	//printList(listMe);
+	//printf("Front value is: %d\n", listQueueFront(listMe));
+	//listQueueRemoveFront(listMe);
+	//printList(listMe);
 	return 0;
 
 }
