@@ -181,7 +181,7 @@ void circularListPrint(struct CircularList* list)
     assert(!circularListIsEmpty(list));
     struct Link * current = list->sentinel->next;
     while (current != list->sentinel) {
-        printf("%f\n", current->value);
+        printf("%g\n", current->value);
         current = current->next;
     }
 }

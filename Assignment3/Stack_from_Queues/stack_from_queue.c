@@ -38,9 +38,11 @@ struct listQueue {
 * to the sentinel.
 */
 void listQueueInit(struct listQueue *q) {
-	
-       // FIXME: you must write this
-
+   struct link *lnk = (struct link *) malloc(sizeof(struct link));
+   assert(lnk != 0); /* lnk is the sentinel */
+   lnk->next = 0;
+   q->firstLink = q->lastLink = lnk;
+   q->size = 0;
 }
 
 /*
@@ -52,7 +54,10 @@ the newly
  */
 struct listQueue * listQueueCreate()
 {
-     //FIXME: you must write this
+     struct listQueue * newQueue = (struct listQueue *) \
+        malloc(sizeof(struct listQueue));
+    init(newQueue);
+    return newQueue;
 	
 }
 
@@ -63,7 +68,7 @@ struct listQueue * listQueueCreate()
 */
 int listQueueIsEmpty(struct listQueue *q) {
 	
-          //FIXME: you must write this
+    return(q->size == 0);
 
 }
 
@@ -76,9 +81,10 @@ links
  */
 void listQueueAddBack(struct listQueue *q, TYPE e) {
 	
-
-       // FIXME: you must write this
-
+    struct link* newLink=(struct link*)malloc(sizeof(struct link));
+    q->lastLink->next = newLink;
+    q->lastLink = newLink;
+    newLink->value = e;
 }
 
 /*
@@ -86,8 +92,12 @@ void listQueueAddBack(struct listQueue *q, TYPE e) {
  */
 void listQueueRemoveFront(struct listQueue *q) {
 
-    
-    // FIXME: you must write this
+    assert(!listQueueIsEmpty);              // Ensure links present
+    struct link * toFree = q->firstLink;    // Store pointer to free
+    q->firstLink = toFree->next;            // Set firstlink to prev 2nd
+    free(toFree);                           // Free to remove authority
+    toFree = NULL;                          // Set NULL to remove access
+
 
 
 
@@ -97,8 +107,8 @@ void listQueueRemoveFront(struct listQueue *q) {
  * Function returns the value at the front of the list.
  */
 TYPE listQueueFront(struct listQueue *q) {
-	
-       // FIXME: you must write this
+    assert(!listQueueIsEmpty); 
+    return q->firstLink->value;
 
 }
 
@@ -137,7 +147,9 @@ both
  */
 void linkedListStackInit(struct linkedListStack * s)
 {
-	// FIXME: you must write this
+    s->structSize = 0;
+    s->Q1 = listQueueCreate();
+    s->Q2 = listQueueCreate();
 
  }
 
@@ -148,8 +160,12 @@ calls the
 the stack.
 */
 struct linkedListStack * linkedListStackCreate(){
-
-    // FIXME: you must write this
+    // Allocate space for
+    struct linkedListStack * newStack = (struct listQueue *) \
+        malloc(sizeof(struct linkedListStack));
+    // Initialize
+    linkedListStackInit(newStack);
+    return newStack;
 
 	
 
@@ -161,7 +177,7 @@ returns a 0.
 */
 int linkedListStackIsEmpty(struct linkedListStack *s) {
 
-	// FIXME: you must write this
+    return (s->structSize == 0);
 
 
 }
@@ -170,24 +186,43 @@ int linkedListStackIsEmpty(struct linkedListStack *s) {
  * This is the linked list acting as a stack push function. It takes 
  * a linked list stack argument and a value and pushes it onto the stack. 
 The
- * funciton then also increases the size of the stack by 1. 
+ * function then also increases the size of the stack by 1. 
  */
 void linkedListStackPush(struct linkedListStack *s, TYPE d) {
-	
-        // FIXME: you must write this
+    struct link * swapper = s->Q1;          // To swap Q1 and Q2
+    
+    // Increase size, because of push
+    s->structSize++;
+    
+    // Push to empty Q2
+    listQueueAddBack(s->Q2);
+    
+    // Move all elements from Q1 to Q2;
+    while (listQueueIsEmpty(s->Q1) {
+        listQueueAddBack(s->Q2, listQueueFront(s->Q1));
+        listQueueRemoveFront(s->Q1);
+    }
+    
+    // Swap the two queues
+    s->Q1 = s->q2;
+    s->Q2 = swapper;
 
 
 }
 /*
- * This funciton pops a value off of the stack. It does this by moving all 
+ * This function pops a value off of the stack. It does this by moving all 
 values
  * that are currently on the stack to the other queue. The stack top is 
 maintained
  * at the back of the queue list. 
  */
 void linkedListStackPop(struct linkedListStack *s) {
-	
-        // FIXME: you must write this
+	// Check to make sure not empty
+    assert(!listQueueIsEmpty(s->Q1);
+    
+    // Pop off from Q1 & decrease size
+    listQueueRemoveFront(s->Q1);
+    s->structSize--;
 
 }
 /*
@@ -196,8 +231,9 @@ is
  * maintaing the values of the stack. 
  */
 TYPE linkedListStackTop(struct linkedListStack *s) {
-
-       // FIXME: you must write this
+    // Assert not empty and return front value
+    assert(!listQueueIsEmpty(s->Q1);
+    return listQueueFront(s->Q1);
 
 }
 
