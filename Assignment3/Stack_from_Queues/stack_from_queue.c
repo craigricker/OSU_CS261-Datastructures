@@ -94,19 +94,16 @@ void listQueueAddBack(struct listQueue *q, TYPE e) {
  */
 void listQueueRemoveFront(struct listQueue *q) {
 
-    assert(!listQueueIsEmpty(q));            // Ensure links present
-    struct link * toFree = q->firstLink->next;// Store pointer to free
-    q->firstLink->next = toFree->next;            // Set firstlink to prev 2nd
-    free(toFree);                           // Free to remove authority
-    toFree = NULL;                          // Set NULL to remove access
-	 q->size--;								// Reduce size
+    assert(!listQueueIsEmpty(q));               // Ensure links present
+    struct link * toFree = q->firstLink->next;  // Store pointer to free
+    q->firstLink->next = toFree->next;          // Set firstlink to prev 2nd
+    free(toFree);                               // Free to remove authority
+    toFree = NULL;                              // Set NULL to remove access
+	 q->size--;                                  // Reduce size
    
    // Special case
    if (q->size == 0)
       q->lastLink = q->firstLink;
-
-
-
 
 }
 
@@ -292,15 +289,6 @@ void linkedListStackFree(struct linkedListStack *s){
 
 }
 
-/*
- * This function gores through the stack and prints all items
- *
- */
-void linkedListStackPrint(struct linkedListStack *s) {
-
-   printList(s->Q1);
-   
-}
 
 /*
  * Main is used to test the stack ADT.
