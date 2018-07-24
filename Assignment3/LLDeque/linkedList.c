@@ -1,3 +1,13 @@
+/*
+ * This is the file in which you'll write the functions required to
+ * implement
+ * a linked list deque.  Make sure to add your name and
+ @oregonstate.edu
+ * email address below:
+ *
+ * Name: Craig Ricker
+ * Email: rickercr@oregonstate.edu
+ */
 #include "linkedList.h"
 #include <assert.h>
 #include <stdlib.h>

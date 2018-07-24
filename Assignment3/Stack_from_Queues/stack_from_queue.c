@@ -5,8 +5,8 @@ implement
 @oregonstate.edu
  * email address below:
  *
- * Name: 
- * Email:
+ * Name: Craig Ricker
+ * Email: rickercr@oregonstate.edu
  */
 
 #include <assert.h>
@@ -81,11 +81,11 @@ links
  */
 void listQueueAddBack(struct listQueue *q, TYPE e) {
 	
-    struct link* newLink=(struct link*)malloc(sizeof(struct link));
-    q->lastLink->next = newLink;
+   struct link* newLink = (struct link*)malloc(sizeof(struct link));
+   q->lastLink->next = newLink;
 	newLink->value = e;
 	newLink->next = NULL;
-    q->lastLink = newLink;
+   q->lastLink = newLink;
 	q->size++;
 }
 
@@ -99,7 +99,11 @@ void listQueueRemoveFront(struct listQueue *q) {
     q->firstLink->next = toFree->next;            // Set firstlink to prev 2nd
     free(toFree);                           // Free to remove authority
     toFree = NULL;                          // Set NULL to remove access
-	q->size--;								// Reduce size
+	 q->size--;								// Reduce size
+   
+   // Special case
+   if (q->size == 0)
+      q->lastLink = q->firstLink;
 
 
 
@@ -233,9 +237,33 @@ is
  */
 TYPE linkedListStackTop(struct linkedListStack *s) {
     // Assert not empty and return front value
-    assert(!linkedListStackIsEmpty(s));
-
-    return listQueueFront(s->Q1);
+   assert(!linkedListStackIsEmpty(s));
+   TYPE toAdd;
+   
+   while(s->Q1->size != 1) {
+      toAdd = listQueueFront(s->Q1);
+      listQueueAddBack(s->Q2, toAdd);
+      listQueueRemoveFront(s->Q1);
+   }
+   
+   // Last item that was pushed
+   TYPE temp = listQueueFront(s->Q1);
+   
+   // Empty queue now that all are used
+   listQueueRemoveFront(s->Q1);
+   
+   // Push last item
+   listQueueAddBack(s->Q2, temp);
+   
+   // Swap the two queues
+   struct listQueue * swapper = s->Q1;
+   s->Q1 = s->Q2;
+   s->Q2 = swapper;
+   
+   // Return values
+   return temp;
+   
+   
 
 }
 
@@ -265,90 +293,82 @@ void linkedListStackFree(struct linkedListStack *s){
 }
 
 /*
+ * This function gores through the stack and prints all items
+ *
+ */
+void linkedListStackPrint(struct linkedListStack *s) {
+
+   printList(s->Q1);
+   
+}
+
+/*
  * Main is used to test the stack ADT.
  */
 int main(int argc, char* argv[])
 {
-	struct linkedListStack *stack = linkedListStackCreate();
+   struct linkedListStack *stack = linkedListStackCreate();
+   
+   //Test Stack
+   //Push 4 values onto the stack
+   printf("Pushing the value: 1\n");
+   linkedListStackPush(stack, 1);
+   printf("Pushed.\n\n");
+   
+   printf("Pushing the value: 2\n");
+   linkedListStackPush(stack, 2);
+   printf("Pushed.\n\n");
+   
+   printf("Pushing the value: 3\n");
+   linkedListStackPush(stack, 3);
+   printf("Pushed.\n\n");
+   
+   printf("Pushing the value: 4\n");
+   linkedListStackPush(stack, 4);
+   printf("Pushed.\n\n");
+   
+   
+   
+   //Print value at the top and then remove it
+   printf("Value at the top of stack %d now being popped. \n",linkedListStackTop(stack));
+   linkedListStackPop(stack);
+   printf("Value popped.\n\n");
+   
+   printf("Value at the top of stack: %d now being popped. \n", linkedListStackTop(stack));
+   linkedListStackPop(stack);
+   printf("Value popped.\n\n");
+   
+   printf("Value at the top of stack: %d now being popped. \n", linkedListStackTop(stack));
+   linkedListStackPop(stack);
+   printf("Value popped.\n\n");
+   
+   printf("Value at the top of stack: %d now being popped. \n", linkedListStackTop(stack));
+   linkedListStackPop(stack);
+   printf("Value popped.\n\n");
+   
+   //Try to pop when the stack is empty prints error:
+   printf("Trying to pop empty stack:\n");
 
-	//Test Stack
-	//Push 4 values onto the stack
-	printf("Pushing the value: 1\n");
-	linkedListStackPush(stack, 1);
-	printf("Pushed.\n\n");
-
-	printf("Pushing the value: 2\n");
-	linkedListStackPush(stack, 2);
-	printf("Pushed.\n\n");
-
-	printf("Pushing the value: 3\n");
-	linkedListStackPush(stack, 3);
-	printf("Pushed.\n\n");
-
-	printf("Pushing the value: 4\n");
-	linkedListStackPush(stack, 4);
-	printf("Pushed.\n\n");
-
-
-
-	//Print value at the top and then remove it
-	printf("Value at the top of stack %d now being popped. \n",linkedListStackTop(stack));
-	linkedListStackPop(stack);
-	printf("Value popped.\n\n");
-
-	printf("Value at the top of stack: %d now being popped. \n", linkedListStackTop(stack));
-	linkedListStackPop(stack);
-	printf("Value popped.\n\n");
-
-	printf("Value at the top of stack: %d now being popped. \n", linkedListStackTop(stack));
-	linkedListStackPop(stack);
-	printf("Value popped.\n\n");
-
-	printf("Value at the top of stack: %d now being popped. \n", linkedListStackTop(stack));  
-	linkedListStackPop(stack);
-	printf("Value popped.\n\n");
-
-	//Try to pop when the stack is empty prints error:
-	printf("Trying to pop empty stack:\n");
-
-	linkedListStackPop(stack);
-
-	
-	//Push and Pop alternating
-	printf("Pushing the value: 10\n");
-	linkedListStackPush(stack, 10);
-	printf("Pushed.\n\n");
-
-	printf("Pushing the value: 11\n");
-	linkedListStackPush(stack, 11);
-	printf("Pushed.\n\n");
-
-	printf("One more pop:\n");
-	linkedListStackPop(stack);
-	printf("Value at the top of stack: %d\n", 
-	linkedListStackTop(stack));
-
-	linkedListStackFree(stack);
-
-	//struct listQueue * listMe = listQueueCreate();
-	//listQueueAddBack(listMe, 1);
-	//listQueueAddBack(listMe, 2);
-	//listQueueAddBack(listMe, 3);
-	//printList(listMe);
-
-	//printf("Front value is: %d\n", listQueueFront(listMe));
-	//listQueueRemoveFront(listMe);
-	//printList(listMe);
-
-
-	//printf("Front value is: %d\n", listQueueFront(listMe));
-	//listQueueRemoveFront(listMe);
-	//printList(listMe);
-	//printf("Front value is: %d\n", listQueueFront(listMe));
-	//listQueueRemoveFront(listMe);
-	//printList(listMe);
-
-	return 0;
+   linkedListStackPop(stack);
+   
+   
+   //Push and Pop alternating
+   printf("Pushing the value: 10\n");
+   linkedListStackPush(stack, 10);
+   printf("Pushed.\n\n");
+   
+   printf("Pushing the value: 11\n");
+   linkedListStackPush(stack, 11);
+   printf("Pushed.\n\n");
+   
+   printf("One more pop:\n");
+   linkedListStackPop(stack);
+   printf("Value at the top of stack: %d\n",
+          linkedListStackTop(stack));
+   
+   linkedListStackFree(stack);
+   
+   return 0;
 
 }
 

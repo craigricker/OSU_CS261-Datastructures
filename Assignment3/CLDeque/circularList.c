@@ -1,3 +1,14 @@
+/*
+ * This is the file in which you'll write the functions required to
+ * implement
+ * a circular list.  Make sure to add your name and
+ @oregonstate.edu
+ * email address below:
+ *
+ * Name: Craig Ricker
+ * Email: rickercr@oregonstate.edu
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
