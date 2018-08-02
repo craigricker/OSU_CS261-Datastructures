@@ -35,6 +35,7 @@ struct Node * newNode(TYPE val) {
     assert(created);
     created->val = val;
 	created->left = created->right = NULL;
+    return created;
 }
  
  
