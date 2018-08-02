@@ -201,9 +201,9 @@ int containsBSTree(struct BSTree *tree, TYPE val)
 		if (compare(val, cur->val) == 0)             //input = current
 			return 1;                               // return true
         else if (compare(val, cur->val) > 0)       // input <= current
-			cur->right = _addNode(cur->right, val); // go right
+			cur = cur->right;          // go right
 		else                                        // input > current
-			cur->left = _addNode(cur->left, val);   // go left
+			cur = cur->left;   // go left
     }
     
     return 0;                                       // Item not present
@@ -599,7 +599,7 @@ int main(int argc, char *argv[]){
   	testAddNode();
 	
 	printf("\n");
-  	//testContainsBSTree();
+  	testContainsBSTree();
 	
 	printf("\n");
        //testLeftMost();
@@ -608,8 +608,9 @@ int main(int argc, char *argv[]){
     //testRemoveLeftMost();
 	
 	printf("\n");
-    //testRemoveNode();
+        //testRemoveNode();
     
+	
 	
 	return 0;
 
