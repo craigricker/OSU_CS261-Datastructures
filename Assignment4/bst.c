@@ -151,7 +151,7 @@ struct Node *_addNode(struct Node *cur, TYPE val)
 {   
 	if (cur == NULL)                            // Base case
 		return newNode(val);
-	else if (compare(val, cur->val) <= 0)       // input <= current
+	else if (compare(val, cur->val) > 0)       // input <= current
 		cur->right = _addNode(cur->right, val); // go right
 	else                                        // input > current
 		cur->left = _addNode(cur->left, val);   // go left
@@ -200,7 +200,7 @@ int containsBSTree(struct BSTree *tree, TYPE val)
     while (cur != NULL ) {
 		if (compare(val, cur->val) == 0)             //input = current
 			return 1;                               // return true
-		else if (compare(val, cur->val) < 0)        // input < current
+        else if (compare(val, cur->val) > 0)       // input <= current
 			cur->right = _addNode(cur->right, val); // go right
 		else                                        // input > current
 			cur->left = _addNode(cur->left, val);   // go left
@@ -298,7 +298,7 @@ struct Node *_removeNode(struct Node *cur, TYPE val)
 		}
 	}
 
-	else if (compare(val, cur->val) < 0)        // input < current
+	else if (compare(val, cur->val) > 0)       // input <= current
 		cur->right = _addNode(cur->right, val); // go right
 	else                                        // input > current
 		cur->left = _addNode(cur->left, val);   // go left
