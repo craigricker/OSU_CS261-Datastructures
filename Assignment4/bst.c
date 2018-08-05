@@ -1,8 +1,12 @@
 /*
- File: bst.c
- Implementation of the binary search tree data structure.
- 
+ * File: bst.c
+ * Implementation of the binary search tree data structure.
+ * email address below:
+ *
+ * Name: Craig Ricker
+ * Email: rickercr@oregonstate.edu
  */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -260,7 +264,7 @@ struct Node *_removeLeftMost(struct Node *cur)
     }
     else {
         rightChild = cur->right;
-        free(cur->val);     // Free stored value
+        //free(cur->val);     // Free stored value
         free(cur);          // Free current SAFELY
         cur = NULL;         // Remove access
         return rightChild;
@@ -284,24 +288,24 @@ struct Node *_removeNode(struct Node *cur, TYPE val)
     // Temp node to help free
     struct Node * temp;
 
-	if (compare(val, cur->val) == 0) {          //Base case
-		if (!cur->right) {                      // No right child
+	if (compare(val, cur->val) == 0) {        //Base case
+		if (!cur->right) {                     // No right child
 			temp = cur->left;                   // To update cur
-			free(cur->val);                     // Free value stored
+			//free(cur->val);                   // Free value stored
 			free(cur);                          // Free cur
 			cur = NULL;                         // Remove access
 			return temp;
 		}
-		else {                                  // Special removal
+		else {                                    // Special removal
 			cur->val = _leftMost(cur);
 			cur->right = _removeLeftMost(cur);
 		}
 	}
 
 	else if (compare(val, cur->val) > 0)       // input <= current
-		cur->right = _addNode(cur->right, val); // go right
+		cur->right = _removeNode(cur->right, val); // go right
 	else                                        // input > current
-		cur->left = _addNode(cur->left, val);   // go left
+		cur->left = _removeNode(cur->left, val);   // go left
         
     // Return to build tree back update
     return cur;
@@ -602,13 +606,13 @@ int main(int argc, char *argv[]){
   	testContainsBSTree();
 	
 	printf("\n");
-       //testLeftMost();
+   testLeftMost();
 	
 	printf("\n");
-    //testRemoveLeftMost();
+    testRemoveLeftMost();
 	
 	printf("\n");
-        //testRemoveNode();
+   testRemoveNode();
     
 	
 	
