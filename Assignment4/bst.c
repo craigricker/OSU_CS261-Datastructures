@@ -297,8 +297,8 @@ struct Node *_removeNode(struct Node *cur, TYPE val)
 			return temp;
 		}
 		else {                                    // Special removal
-			cur->val = _leftMost(cur);
-			cur->right = _removeLeftMost(cur);
+			cur->val = _leftMost(cur->right);
+			cur->right = _removeLeftMost(cur->right);
 		}
 	}
 
