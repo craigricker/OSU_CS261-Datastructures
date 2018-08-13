@@ -22,6 +22,7 @@ char* nextWord(FILE* file)
    while (1) 
     {
         char c = fgetc(file);
+        c = tolower(c);
         if ((c >= '0' && c <= '9') ||
             (c >= 'A' && c <= 'Z') ||
             (c >= 'a' && c <= 'z') ||
@@ -54,9 +55,9 @@ char* nextWord(FILE* file)
  * Prints the concordance of the given file and performance information. Uses
  * the file input1.txt by default or a file name specified as a command line
  * argument.
- * @param argc
- * @param argv
- * @return
+ * @param argc stuff
+ * @param argv stuff
+ * @return     stuff
  */
 int main(int argc, const char** argv)
 {
@@ -76,22 +77,28 @@ int main(int argc, const char** argv)
     // Be sure to free the word after you are done with it here.
     // --- Concordance code ends here ---
    
-   FILE * openFile = fopen(fileName, 'r');
-   char * curWord = nextWord(file);
+   FILE * openFile = fopen(fileName, "r");
+   
+   // Ensure file opened succesfully
+   assert(openFile);
+   
+   char * curWord = nextWord(openFile);
    
    // Loop through, adding each word to the map
    while (curWord) {
       hashMapPut(map, curWord, 1);
       free(curWord);
-      word = nextWord(file);
+      curWord = nextWord(openFile);
    }
    HashLink * cur;
    for (int i = 0; i < hashMapCapacity(map); i++) {
       printf("Bucket %d -> ", i);
+      cur = map->table[i];
       while (cur) {
-         print("(%s, %d) -> ", cur->key, cur->value);
+         printf("(%s, %d) -> ", cur->key, cur->value);
          cur = cur->next;
       }
+      printf("\n");
    }
     
     hashMapPrint(map);
