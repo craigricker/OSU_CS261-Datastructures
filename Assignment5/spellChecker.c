@@ -114,7 +114,7 @@ int main(int argc, const char** argv)
    int matchScores[N_TO_PRINT];           // corresponding words
    
    // Load dictionary into hash
-   FILE* file = fopen("/Users/craig/Documents/OSU_CS261/CS271/dictionary.txt", "r");
+   FILE* file = fopen("dictionary.txt", "r");
    assert(file);                          // Assert file opened
    clock_t timer = clock();
    loadDictionary(file, map);
@@ -167,6 +167,7 @@ int main(int argc, const char** argv)
                      strcpy(matches[k], matches[k-1]);
                   }
                   // Store the scores
+                  printf("Adding: %s, score: %d\n", cur->key, leviScore);
                   matchScores[j] = leviScore;
                   strcpy(matches[j], cur->key);
                   break;
