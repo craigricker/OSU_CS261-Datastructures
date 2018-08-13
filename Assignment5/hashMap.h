@@ -7,7 +7,7 @@
  */
 
 #define HASH_FUNCTION hashFunction1
-#define MAX_TABLE_LOAD 10
+#define MAX_TABLE_LOAD 5
 
 typedef struct HashMap HashMap;
 typedef struct HashLink HashLink;

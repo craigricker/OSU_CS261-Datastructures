@@ -9,7 +9,7 @@
 /**
  * Allocates a string for the next word in the file and returns it. This string
  * is null terminated. Returns NULL after reaching the end of the file.
- * @param file
+ * @param file teststuff
  * @return Allocated string or NULL.
  */
 char* nextWord(FILE* file)
@@ -17,7 +17,8 @@ char* nextWord(FILE* file)
     int maxLength = 16;
     int length = 0;
     char* word = malloc(sizeof(char) * maxLength);
-//Fix me: Do the necessary change to make the implementation //case-insensitive  
+//Fix me: Do the necessary change to make the implementation
+//case-insensitive
    while (1) 
     {
         char c = fgetc(file);
@@ -74,6 +75,24 @@ int main(int argc, const char** argv)
     // --- Concordance code begins here ---
     // Be sure to free the word after you are done with it here.
     // --- Concordance code ends here ---
+   
+   FILE * openFile = fopen(fileName, 'r');
+   char * curWord = nextWord(file);
+   
+   // Loop through, adding each word to the map
+   while (curWord) {
+      hashMapPut(map, curWord, 1);
+      free(curWord);
+      word = nextWord(file);
+   }
+   HashLink * cur;
+   for (int i = 0; i < hashMapCapacity(map); i++) {
+      printf("Bucket %d -> ", i);
+      while (cur) {
+         print("(%s, %d) -> ", cur->key, cur->value);
+         cur = cur->next;
+      }
+   }
     
     hashMapPrint(map);
     

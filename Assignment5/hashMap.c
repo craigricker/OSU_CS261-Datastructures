@@ -85,16 +85,19 @@ void hashMapCleanUp(HashMap* map)
 {
    assert(map);
    HashLink * deleteMe;
+   HashLink * curr;
    // Loop through the hash, clearing up all items
    for (int i = 0; i < map->capacity; i++) {
       // As long as links are present in that hash, delete
-      for(HashLink * curr = map->table[i];
-          curr != NULL;) {
+      curr = map->table[i];
+      while(curr) {
          deleteMe = curr;
          curr = curr->next;
          hashLinkDelete(deleteMe);
       }
    }
+   free(map->table);
+   map->size = 0;
 }
 
 /**
@@ -143,7 +146,7 @@ int* hashMapGet(HashMap* map, const char* key)
    // Look through all links, checking if key is present
    while (cur != NULL) {
       // If present, return value
-      if (cur->key == key)
+      if (strcmp(cur->key, key) == 0)
          return &cur->value;
       // Progress to next link
       cur = cur->next;
@@ -182,8 +185,13 @@ void resizeTable(HashMap* map, int capacity)
    }
    
    // Free up old map, and set to new value
-   hashMapDelete(map);
-   map = newMap;
+   hashMapCleanUp(map);
+   map->size = newMap->size;
+   map->table = newMap->table;
+   map->capacity = newMap->capacity;
+   
+   newMap->table = NULL;
+   free(newMap);
    
    
 }
@@ -205,26 +213,30 @@ void hashMapPut(HashMap* map, const char* key, int value)
 {
    assert(map);
    assert(key);
-   if (hashMapSize(map) >= MAX_TABLE_LOAD)
-      resizeTable(map, map->capacity * 2);
+
    // Find location/bin where key is hashed to
-   int loc = HASH_FUNCTION(key) % map->capacity;
-   HashLink * cur = map->table[loc];
+   int loc = HASH_FUNCTION(key);
+   // Mod in order to be within size
+   loc = loc  % map->capacity;
+   int * overWrite;                 // To update value
    
-   // Look through all links, checking if key is present
-   while (cur != NULL) {
-      // If present, return 1
-      if (cur->key == key) {
-         cur->value = value;
-         return;
-      }
-      // Progress to next link
-      cur = cur->next;
+   if (loc < 0) {
+      loc += map->capacity;
    }
    
-   // Add and update table
-   map->table[loc] = hashLinkNew(key, value, map->table[loc]);
-   map->size++;
+   // Look through all links, checking if key is present
+   if (hashMapContainsKey(map, key)) {
+      overWrite = hashMapGet(map, key);
+      (*overWrite) += value;
+   }
+   else {
+      map->table[loc] = hashLinkNew(key, value, map->table[loc]);
+      map->size++;
+      
+   }
+   
+   if (hashMapTableLoad(map) >= (float) MAX_TABLE_LOAD)
+      resizeTable(map, map->capacity * 2);
 }
 
 /**
@@ -242,7 +254,7 @@ void hashMapRemove(HashMap* map, const char* key)
    // Find location/bin where key is hashed to
    int loc = HASH_FUNCTION(key) % map->capacity;
    HashLink * cur = map->table[loc];
-   HashLink * toDelete;
+   HashLink * prev = NULL;
    
    // If not present, return false
    if (!hashMapContainsKey(map, key))
@@ -252,17 +264,19 @@ void hashMapRemove(HashMap* map, const char* key)
    
    // Look through all links, when exiting current
    // will be equal to the link before hand.
-   while (cur->next->key != key) {
+   while (strcmp(cur->key,key) != 0) {
+      prev = cur;
       cur = cur->next;
    }
    
    // Remove from map
-   toDelete = cur->next;         // Link to delete
+   if (prev)                           // If first, update next
+      prev->next = cur->next;          // Link to delete
    // Special case where you're removing first item in map
-   if (map->table[loc] == toDelete)
-      map->table[loc] = toDelete->next;
-   cur->next = cur->next->next;  // Remove link from list
-   hashLinkDelete(toDelete);
+   else
+      map->table[loc] = cur->next;
+   
+   hashLinkDelete(cur);
    map->size--;
    
    
@@ -290,7 +304,7 @@ int hashMapContainsKey(HashMap* map, const char* key)
    // Look through all links, checking if key is present
    while (cur != NULL) {
       // If present, return 1
-      if (cur->key == key)
+      if (strcmp(cur->key, key) == 0)
          return 1;
       // Progress to next link
       cur = cur->next;
