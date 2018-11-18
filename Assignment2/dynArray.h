@@ -1,3 +1,8 @@
+/* CS261- Assignment 2
+ * Name:    Craig Ricker
+ * Date:    July 16, 2018
+ * Solution description: Dynamic Array implementation
+ */
 /* 	dynamicArray_a1.h : Dynamic Array implementation. */
 #ifndef DYNAMIC_ARRAY_INCLUDED
 #define DYNAMIC_ARRAY_INCLUDED 1

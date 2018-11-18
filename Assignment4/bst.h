@@ -29,7 +29,7 @@ struct BSTree;
 void initBSTree(struct BSTree *tree);
 
 /* Alocate and initialize search tree structure. */
-struct BSTree *newBSTree();
+struct BSTree *newBSTree(void);
 
 /* Deallocate nodes in BST. */
 void clearBSTree(struct BSTree *tree);

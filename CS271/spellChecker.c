@@ -114,7 +114,7 @@ int main(int argc, const char** argv)
    int matchScores[N_TO_PRINT];           // corresponding words
    
    // Load dictionary into hash
-   FILE* file = fopen("dictionary.txt", "r");
+   FILE* file = fopen("/Users/craig/Documents/OSU_CS261/CS271/dictionary.txt", "r");
    assert(file);                          // Assert file opened
    clock_t timer = clock();
    loadDictionary(file, map);
@@ -136,9 +136,6 @@ int main(int argc, const char** argv)
       // Read in word
       printf("Enter a word or \"quit\" to quit: ");
       scanf("%s", inputBuffer);
-      for (int i = 0; inputBuffer[i]; i++) {
-         inputBuffer[i] = tolower(inputBuffer[i]);
-      }
       
       // User quit
       if (strcmp(inputBuffer, "quit") == 0)
@@ -157,7 +154,7 @@ int main(int argc, const char** argv)
       for (int i = 0; i < hashMapCapacity(map); i++) {
          cur = map->table[i];
          // Look at all links within current bin
-         while (cur != NULL) {
+         while (cur) {
             // Calculate score
             leviScore = levenshtein(cur->key, inputBuffer);
             // Check if lower score then current values
@@ -165,7 +162,7 @@ int main(int argc, const char** argv)
             // word one place to the right
             for (int j = 0; j < N_TO_PRINT; j++) {
                if (leviScore < matchScores[j]) {
-                  for (int k = N_TO_PRINT - 1; k > j; k--) {
+                  for (int k = N_TO_PRINT; k > j; k--) {
                      matchScores[k] = matchScores[k-1];
                      strcpy(matches[k], matches[k-1]);
                   }
